@@ -47,15 +47,14 @@ const createForm = (FormFunc) => (props) => {
   const getFieldDecorator = (key: string, options: any) => {
     // 判断是否第一次赋值，避免死循环
     const first = Object.keys(formData).indexOf(key) === -1;
-    if (first) {
-      if (options.initialValue) {
-        setFormData({ ...formData, [key]: options.initialValue });
-      }
-    } else {
-      if (options.rules) {
-        rules[key] = [...options.rules];
-      }
+
+    if (options.rules) {
+      rules[key] = [...options.rules];
     }
+    if (first && options.initialValue) {
+      setFormData({ ...formData, [key]: options.initialValue });
+    }
+
     return (formItem) => {
       if (errObj[key]) {
         formItem = {
@@ -69,8 +68,6 @@ const createForm = (FormFunc) => (props) => {
             name: key,
             value: formData[key] || '',
             onChange: (e: any) => {
-              e.persist();
-              console.log(222, e.target.value);
               setErrObj({ ...errObj, [key]: '' });
               setFormData({ ...formData, [key]: e.target.value });
             },
@@ -91,7 +88,7 @@ const createForm = (FormFunc) => (props) => {
         if (rule?.required && (!formData[key] || formData[key].trim() === '')) {
           errObjTemp = {
             ...errObjTemp,
-            [key]: rule?.message || key + '为必填项!',
+            [key]: rule?.message || `${key}为必填项！`,
           };
           setErrObj(errObjTemp);
         }
