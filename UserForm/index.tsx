@@ -9,7 +9,7 @@ const UserForm = (props: IProps) => {
   const { getFieldDecorator, validateFields } = props;
   const [userInfo, setUserInfo] = useState({
     name: '',
-    nickName: '',
+    nickName: '琉易',
   });
 
   const handleSava = () => {
@@ -45,11 +45,16 @@ const createForm = (FormFunc) => (props) => {
   const [errObj, setErrObj] = useState({});
   const rules = {};
   const getFieldDecorator = (key: string, options: any) => {
-    if (options.rules) {
-      rules[key] = [...options.rules];
-    }
-    if (options.initialValue) {
-      formData[key] = options.initialValue;
+    // 判断是否第一次赋值，避免死循环
+    const first = Object.keys(formData).indexOf(key) === -1;
+    if (first) {
+      if (options.initialValue) {
+        setFormData({ ...formData, [key]: options.initialValue });
+      }
+    } else {
+      if (options.rules) {
+        rules[key] = [...options.rules];
+      }
     }
     return (formItem) => {
       if (errObj[key]) {
@@ -64,6 +69,8 @@ const createForm = (FormFunc) => (props) => {
             name: key,
             value: formData[key] || '',
             onChange: (e: any) => {
+              e.persist();
+              console.log(222, e.target.value);
               setErrObj({ ...errObj, [key]: '' });
               setFormData({ ...formData, [key]: e.target.value });
             },
