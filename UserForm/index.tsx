@@ -34,7 +34,7 @@ const UserForm = (props: IProps) => {
         rules: [{ required: true, message: '花名不可为空！' }],
       })(<input className="input" placeholder="请输入花名" />)}
       <button className="btn" onClick={handleSava}>
-        保存
+        保 存
       </button>
     </div>
   );
