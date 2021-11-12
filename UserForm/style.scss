@@ -1,0 +1,25 @@
+.user-form {
+  width: 300px;
+  margin: 100px auto;
+}
+
+.form-item {
+  padding-bottom: 8px;
+  .input {
+    font-size: 16px;
+    padding: 5px;
+    border: 1px rgb(118, 118, 118) solid;
+    &.err {
+      border: 1px #f5222d solid;
+    }
+  }
+  .err-text {
+    color: #f5222d;
+    height: 18px;
+    font-size: 12px;
+  }
+}
+
+.btn {
+  padding: 5px 10px;
+}
