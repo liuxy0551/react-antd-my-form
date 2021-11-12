@@ -1,0 +1,15 @@
+.user-form {
+  width: 300px;
+  margin: 100px auto;
+}
+
+.form-item {
+  padding-bottom: 8px;
+}
+.err {
+  border: 1px #f5222d solid;
+}
+.err-text {
+  color: #f5222d;
+  height: 18px;
+}
