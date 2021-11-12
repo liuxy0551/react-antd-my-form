@@ -64,7 +64,7 @@ const createForm = (FormFunc) => (props) => {
             name: key,
             value: formData[key] || '',
             onChange: (e: any) => {
-              setErrObj({ [key]: '' });
+              setErrObj({ ...errObj, [key]: '' });
               setFormData({ ...formData, [key]: e.target.value });
             },
             onBlur: () => {
@@ -78,14 +78,19 @@ const createForm = (FormFunc) => (props) => {
   };
 
   const validateFields = (cb?: any) => {
+    let errObjTemp = {};
     Object.keys(rules).forEach((key) => {
       rules[key].forEach((rule) => {
         if (rule?.required && (!formData[key] || formData[key].trim() === '')) {
-          setErrObj({ [key]: rule?.message || key + '为必填项!' });
+          errObjTemp = {
+            ...errObjTemp,
+            [key]: rule?.message || key + '为必填项!',
+          };
+          setErrObj(errObjTemp);
         }
       });
     });
-    cb && cb(Object.keys(errObj).length ? errObj : undefined, formData);
+    cb && cb(Object.keys(errObjTemp).length ? errObjTemp : undefined, formData);
   };
 
   return FormFunc({ ...props, getFieldDecorator, validateFields });
