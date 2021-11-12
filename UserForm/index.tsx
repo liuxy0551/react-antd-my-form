@@ -44,6 +44,11 @@ const createForm = (FormFunc) => (props) => {
   const [formData, setFormData] = useState({});
   const [errObj, setErrObj] = useState({});
   const rules = {};
+  /**
+   * 实现 getFieldDecorator 方法
+   * 初始化时将 initialValue 赋值给输入框的 value
+   * 输入框变化时可以拿到 value
+   */
   const getFieldDecorator = (key: string, options: any) => {
     // 判断是否第一次赋值，避免死循环
     const first = Object.keys(formData).indexOf(key) === -1;
@@ -68,10 +73,12 @@ const createForm = (FormFunc) => (props) => {
             name: key,
             value: formData[key] || '',
             onChange: (e: any) => {
+              // 输入框值变化时去除错误提示
               setErrObj({ ...errObj, [key]: '' });
               setFormData({ ...formData, [key]: e.target.value });
             },
             onBlur: () => {
+              // 当前默认 blur 时进行校验
               validateFields();
             },
           })}
@@ -81,6 +88,7 @@ const createForm = (FormFunc) => (props) => {
     };
   };
 
+  // 绑定校验方法
   const validateFields = (cb?: any) => {
     let errObjTemp = {};
     Object.keys(rules).forEach((key) => {
@@ -97,6 +105,7 @@ const createForm = (FormFunc) => (props) => {
     cb && cb(Object.keys(errObjTemp).length ? errObjTemp : undefined, formData);
   };
 
+  // 将自定义方法挂载到 props 上
   return FormFunc({ ...props, getFieldDecorator, validateFields });
 };
 
